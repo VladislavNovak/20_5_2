@@ -14,3 +14,17 @@
 Чтобы разнообразить вывод, вы можете использовать вызов `std::srand(std::time(nullptr));` в самом начале программы. 
 Эта операция задаёт начальное зерно случайных чисел в зависимости от текущего времени. 
 Для её корректной работы не забудьте также включить заголовочный файл <ctime>.
+
+### <font color="tomato">Примечания</font>
+
+`records` - это массив
+
+`complex` - это массив массивов (матрица)
+
+`getTrimmedString` ранее - `trim`
+
+`getUserString` ранее - `getUserWord`
+
+`getUserNumeric` ранее - `getNumeric`
+
+`getUserNumeric` ранее - `splitStringToParts`
