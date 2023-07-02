@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm> // find_if
 #include <sstream> // stringstream
+#include <fstream>
 
 using std::string;
 using std::vector;
@@ -109,21 +110,103 @@ void setComplexData(vector<int> const &sizes, vector<vector<string>> &complexDat
     }
 }
 
+void outputComplexData(std::ostream &out, vector<vector<string>> const &complexData, const string &format = " ") {
+    for (auto &line : complexData) {
+        for (int i = 0; i < line.size(); ++i) {
+             out << line[i] << (i != line.size() - 1 ? format : "");
+        }
+        out << std::endl;
+    }
+}
+
+void writeComplexDataToFile(const char *path,
+                            vector<vector<string>> const &complexData,
+                            bool isAppendMode = true,
+                            const string &format = ",") {
+    std::ofstream file(path, (isAppendMode ? std::ios::app : std::ios::out));
+
+    // Печатаем в поток file
+    outputComplexData(file, complexData, format);
+
+    file.close();
+}
+
+bool readFileToVector(const char* pathName, vector<string> &data) {
+    bool isFileReadSuccessfully = false;
+    std::ifstream in(pathName);
+
+    if (in.is_open() && !in.bad()) {
+        string textLine;
+
+        while (std::getline(in, textLine)) {
+            data.push_back(textLine);
+        }
+
+        in.clear();
+        in.seekg(0, std::ios_base::beg);
+        isFileReadSuccessfully = true;
+    }
+
+    in.close();
+
+    return isFileReadSuccessfully;
+}
+
+bool readFileToComplexData(const char* pathName, vector<vector<string>> &complexData, const char &delim = ',') {
+    vector<string> lines;
+    bool isFileReadSuccessfully = readFileToVector(pathName, lines);
+
+    if (isFileReadSuccessfully && !lines.empty()) {
+        for (const auto &line : lines) {
+            complexData.push_back(getSplitStringOnRecords(line, delim));
+        }
+    }
+
+    return isFileReadSuccessfully;
+}
+
+void printWarning(const char* currentPath) {
+    printf("%s не обнаружен.\n"
+           "Он должен находиться в директории с исполняемым файлом!\n", currentPath);
+}
+
+void displayComplexDataToScreen(vector<vector<string>> const &complexData, const string &format = " ") {
+     system("cls");
+     std::cout << "---------Читаем данные из файла-------------" << std::endl;
+    // Печатаем в поток std::cout
+    outputComplexData(std::cout, complexData, format);
+}
+
 int main() {
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
 
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // NOLINT(cert-msc51-cpp)
 
+    const char* path = R"(..\test.txt)";
+    // Данные для сохранения в файл
     vector<vector<string>> picture;
+    // Данные, извлечённые из файла
+    vector<vector<string>> pictureFromFile;
 
+    // Пользователь задает размеры картины (матрица), затем каждый элемент получаем случайной генерацией цифр
     setComplexData({ getUserNumeric("Высота картины"), getUserNumeric("Ширина картины") }, picture);
+    // Записываем картину (матрица) в файл, который каждый раз создается заново (isAppendMode = false)
+    writeComplexDataToFile(path, picture, false);
 
-    for (auto const &line : picture) {
-        for (auto const &cell : line) {
-            std::cout << cell << " ";
-        }
-        std::cout << std::endl;
+    // Извлекаем данные из файла
+    bool isFileReadSuccessfully = readFileToComplexData(path, pictureFromFile);
+    // Проверяем удачное ли было прочтение из файла
+    if (!isFileReadSuccessfully) {
+        printWarning(path);
+        return 1;
     }
 
+    if (pictureFromFile.empty()) {
+        std::cout << "Проверьте файлы на корректность данных" << std::endl;
+        return 1;
+    }
+
+    // Распечатываем результат на экран
+    displayComplexDataToScreen(pictureFromFile, "  ");
 }

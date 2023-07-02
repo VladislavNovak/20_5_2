@@ -27,4 +27,6 @@
 
 `getUserNumeric` ранее - `getNumeric`
 
-`getUserNumeric` ранее - `splitStringToParts`
+`getSplitStringOnRecords` ранее - `splitStringToParts`
+
+`outputComplexData` ранее - `printComplexData`
