@@ -42,19 +42,19 @@ vector<string> getSplitStringOnRecords(string const &str, const char delim = ','
     return records;
 }
 
-std::string getUserString(const string &propose) {
+std::string getUserLineString(const string &msg) {
     while (true) {
-        string userInput;
-        printf("%s: ", propose.c_str());
-        std::getline(std::cin, userInput);
+        string userLineString;
+        printf("%s: ", msg.c_str());
+        std::getline(std::cin, userLineString);
 
-        userInput = getTrimmedString(userInput);
-        if (userInput.empty()) {
+        userLineString = getTrimmedString(userLineString);
+        if (userLineString.empty()) {
             std::cout << "Строка не может быть пустой. Попробуйте снова!" << std::endl;
             continue;
         }
 
-        return getSplitStringOnRecords(userInput, ' ')[0];
+        return userLineString;
     }
 }
 
@@ -73,7 +73,7 @@ int getUserNumeric(const string &msg = "Введите цифры", int from = 0
     bool isRange = (from != to);
 
     while (true) {
-        string userInput = getUserString(msg);
+        string userInput = getSplitStringOnRecords(getUserLineString(msg), ' ')[0];
 
         if (!isNumeric(userInput)) {
             printf("%s\n", warning.c_str());

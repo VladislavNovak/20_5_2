@@ -17,13 +17,15 @@
 
 ### <font color="tomato">Примечания</font>
 
+Описание большинства функций можно найти в репозитории [16_6_4](https://github.com/VladislavNovak/16_6_4)
+
 `records` - это массив
 
 `complex` - это массив массивов (матрица)
 
 `getTrimmedString` ранее - `trim`
 
-`getUserString` ранее - `getUserWord`
+`getUserLineString` ранее - `getUserWord`
 
 `getUserNumeric` ранее - `getNumeric`
 
